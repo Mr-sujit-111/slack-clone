@@ -5,10 +5,9 @@ import { auth, db } from '../firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
-export default function ChatInput({ channelName, channelId, chatRef }) {
+export default function ChatInput({ channelName, channelId, chatRef, reload }) {
   const [input, setInput] = useState('')
   const [user] = useAuthState(auth)
- 
 
   const sendMessage = async (e) => {
     e.preventDefault(); //prevent refresh
@@ -29,6 +28,7 @@ export default function ChatInput({ channelName, channelId, chatRef }) {
       behavior: "smooth",
     })
 
+    reload();
     setInput('')
   }
 

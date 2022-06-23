@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import ModeIcon from '@mui/icons-material/Mode';
 import Brightness1Icon from '@mui/icons-material/Brightness1';
 import SidebarOption from './SidebarOption';
 import MessageIcon from '@mui/icons-material/Message';
-import { collection, getDocs } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -16,12 +16,17 @@ import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Tooltip } from '@mui/material';
+import { channelList, selectChannelArray } from '../features/app';
+import { collection, getDocs } from 'firebase/firestore';
+import { useDispatch } from 'react-redux';
 
 
 function Sidebar() {
   const [user] = useAuthState(auth);
-  const [allData, setAllData] = useState([])
-  const colRef = collection(db, 'channels')
+  const ChannelId = useSelector(selectChannelArray);
+  const colRef = collection(db, 'channels');
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     getDocs(colRef)
@@ -30,13 +35,15 @@ function Sidebar() {
         snapshot.docs.forEach(doc => {
           chennels.push({ ...doc.data(), id: doc.id })
         })
-        setAllData(chennels)
+        dispatch(channelList({
+          ChannelArray: chennels
+        }))
         return chennels
       })
       .catch(err => {
         console.log(err.message)
       })
-  }, [colRef])
+  }, [])
 
 
   const sidebarData = [
@@ -92,10 +99,10 @@ function Sidebar() {
         <SidebarOption addNewChannel Icon={AddIcon} title="AddChannels" />
         <hr />
         <SidebarOption Icon={ExpandMoreIcon} title="Show more" />
-        {
-          allData.map((dataItem, index) => {
-            const length = Object.keys(dataItem).length;
-            return length === 2 && <SidebarOption key={dataItem.id} id={dataItem.id} title={dataItem.c_name} />
+        { // return length === 2 && <SidebarOption key={dataItem.id} id={dataItem.id} title={dataItem.c_name} />
+          ChannelId &&
+          ChannelId.map((dataItem, index) => {
+            return <SidebarOption key={dataItem.id} id={dataItem.id} title={dataItem.c_name} />
           })
         }
       </SidebarMain>
@@ -104,7 +111,6 @@ function Sidebar() {
 }
 
 export default Sidebar
-
 
 const SidebarMain = styled.div`
 background-color: #421f44;

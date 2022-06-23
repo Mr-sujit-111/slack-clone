@@ -1,31 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
-import { db, DeleteData } from '../firebase';
+import { db } from '../firebase';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { enterRoom } from '../features/app';
+import { channelList, enterRoom, selectChannelArray } from '../features/app';
 import { useDispatch } from 'react-redux';
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { useSelector } from 'react-redux';
 
-const Channels = [];
-console.log(Channels);
 
 function SidebarOption(props) {
   const dispatch = useDispatch();
   const { title, Icon, addNewChannel, id } = props
   const [channel, setChannel] = useState('');
   const colRef = collection(db, 'channels');
-  const [allchennels, setAllchennels] = useState([])
+  const ChannelId = useSelector(selectChannelArray);
 
 
   const addChannel = async () => {
     const channelName = prompt("Please enter channel name");
     if (channelName) {
 
-      const docRef = await addDoc(collection(db, "channels"), {
+      await addDoc(collection(db, "channels"), {
         c_name: channelName
       });
-
-      console.log(`Document written with ID: and  data : ${channelName}`);
 
       getDocs(colRef)
         .then(snapshot => {
@@ -33,17 +30,14 @@ function SidebarOption(props) {
           snapshot.docs.forEach(doc => {
             chennels.push({ ...doc.data(), id: doc.id })
           })
-          setAllchennels(chennels)
+          dispatch(channelList({
+            ChannelArray: chennels
+          }))
           return chennels
         })
         .catch(err => {
           console.log(err.message)
         })
-
-      console.log(allchennels)
-      dispatch(enterRoom({
-        ChannelArray: { channels: allchennels }
-      }))
     }
   }
 
@@ -56,14 +50,34 @@ function SidebarOption(props) {
       dispatch(enterRoom({
         channelId: id,
         channelName: channel,
-        ChannelArray: { channels: allchennels }
       }))
     }
   }
 
-  const deleteChennel = () => {
-    console.log(id)
-    DeleteData(id);
+  const deleteChennel = async () => {
+    if (id) {
+      try {
+        await deleteDoc(doc(db, "channels", id));
+        getDocs(colRef)
+          .then(snapshot => {
+            let chennels = []
+            snapshot.docs.forEach(doc => {
+              chennels.push({ ...doc.data(), id: doc.id })
+            })
+            dispatch(channelList({
+              ChannelArray: chennels
+            }))
+            return chennels
+          })
+          .catch(err => {
+            console.log(err.message)
+          })
+        console.log(ChannelId)
+        return console.log('deleted')
+      } catch (error) {
+        return console.log('false', error.message)
+      }
+    }
   }
   return (
     <div>

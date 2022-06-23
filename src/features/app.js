@@ -9,15 +9,25 @@ export const appSlice = createSlice({
     enterRoom: (state, action) => {
       state.channelId = action.payload.channelId;
       state.channelName = action.payload.channelName;
+    },
+    channelList: (state, action) => {
       state.ChannelArray = action.payload.ChannelArray;
+    },
+    messageList: (state, action) => {
+      state.MessageArray = action.payload.MessageArray;
+    },
+    reloadPage: (state, action) => {
+      state.reload = action.payload.MessageArray;
     },
   },
 });
 
-export const { enterRoom } = appSlice.actions;
+export const { enterRoom, channelList, messageList, reloadPage } = appSlice.actions;
 
 export const selectChannelId = state => state.app.channelId;
 export const selectchannelName = state => state.app.channelName;
 export const selectChannelArray = state => state.app.ChannelArray;
+export const selectMessageArray = state => state.app.MessageArray;
+export const selectReload = state => state.app.reload;
 
 export default appSlice.reducer;
