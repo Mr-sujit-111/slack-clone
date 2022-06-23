@@ -6,32 +6,32 @@ import { auth, provider } from '../firebase';
 import { signInWithPopup } from "firebase/auth";
 
 export default function Login() {
-    const signIn = (e) => {
-        e.preventDefault();
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                // ...
-            }).catch((error) => {
-                // Handle Errors here.
-                console.log(error)
-                // ...
-            });
-    }
+  const signIn = (e) => {
+    e.preventDefault();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        // ...
+      }).catch((error) => {
+        // Handle Errors here.
+        console.log(error)
+        // ...
+      });
+  }
 
-    return (
-        <LoginContainer>
-            <LoginInnerContainer>
-                <img
-                    src="http://assets.stickpng.com/images/5cb480cd5f1b6d3fbadece79.png"
-                    alt=""
-                />
-                <h1>Sign in</h1>
-                <p>hillary.slack.com</p>
-                <Button onClick={signIn}>Sign in with google</Button>
-            </LoginInnerContainer>
-        </LoginContainer>
-    )
+  return (
+    <LoginContainer>
+      <LoginInnerContainer>
+        <img
+          src="http://assets.stickpng.com/images/5cb480cd5f1b6d3fbadece79.png"
+          alt=""
+        />
+        <h1>Sign in</h1>
+        <p>hillary.slack.com</p>
+        <Button onClick={signIn}>Sign in with google</Button>
+      </LoginInnerContainer>
+    </LoginContainer>
+  )
 }
 
 const LoginContainer = styled.div`
@@ -46,6 +46,7 @@ const LoginInnerContainer = styled.div`
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  width: 25%;
   >img {
     object-fit: contain;
     height: 100px;

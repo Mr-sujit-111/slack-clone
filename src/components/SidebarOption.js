@@ -58,6 +58,8 @@ function SidebarOption(props) {
     if (id) {
       try {
         await deleteDoc(doc(db, "channels", id));
+
+        // get data from collection channels
         getDocs(colRef)
           .then(snapshot => {
             let chennels = []
@@ -73,7 +75,7 @@ function SidebarOption(props) {
             console.log(err.message)
           })
         console.log(ChannelId)
-        return console.log('deleted')
+        return console.log('deleted');
       } catch (error) {
         return console.log('false', error.message)
       }

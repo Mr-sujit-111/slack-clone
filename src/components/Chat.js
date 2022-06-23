@@ -16,8 +16,8 @@ function Chat() {
   const [reloadme, setReloadme] = useState(true)
   const subColRef = collection(db, "channels", ChannelId ? ChannelId : "R6mIEcxbX7F5Yx8qCMu6", "Messages");
 
+
   const reload = () => {
-    console.log('reloading')
     setReloadme(!reloadme)
   }
 
@@ -27,9 +27,12 @@ function Chat() {
       .then(snapshot => {
         let messages = []
         snapshot.docs.forEach(doc => {
-          messages.push({ ...doc.data(), id: doc.id })
+          const time = new Date(doc.data().time.toDate()).toUTCString();
+          messages.push({ ...doc.data(), id: doc.id, timeStamp: time, seconds: doc.data().time.seconds })
         })
-        console.log(reloadme)
+        messages.sort(function (x, y) {
+          return x.seconds - y.seconds;
+        })
         setAllMessages(messages)
         return messages
       })
@@ -43,11 +46,12 @@ function Chat() {
       {ChannelId &&
         <ChatMessages>
           {allMessages.map((messages, index) => {
-            const { message, user, userImage } = messages;
+            const { message, user, time, userImage, timeStamp } = messages;
             return <>
-              <MessageBox key={message}
+              <MessageBox
+                key={timeStamp}
                 Message={message}
-                // Timestamp={time}
+                Timestamp={timeStamp}
                 User={user}
                 UserImage={userImage}
               />
@@ -57,6 +61,7 @@ function Chat() {
         </ChatMessages>
       }
       <ChatInput
+        key={1}
         reload={reload}
         chatRef={chatRef}
         channelName={ChannelName}

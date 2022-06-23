@@ -7,7 +7,11 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 export default function ChatInput({ channelName, channelId, chatRef, reload }) {
   const [input, setInput] = useState('')
-  const [user] = useAuthState(auth)
+  const [user] = useAuthState(auth);
+
+  if (channelName === undefined) {
+    channelName = "ChannelName"
+  }
 
   const sendMessage = async (e) => {
     e.preventDefault(); //prevent refresh
@@ -56,14 +60,14 @@ const ChatInputContainer = styled.div`
   > form input {
     position:fixed;
     bottom:30px;
-    width: 60%;
+    width: 40%;
     border: 1px solid gray;
     border-radius:3px;
     padding: 20px;
     outline: none;
     text-align: center;
     box-sizing: border-box;
-    margin-left: 80%;
+    margin-left: 50%;
   }
 
   > form > button {
