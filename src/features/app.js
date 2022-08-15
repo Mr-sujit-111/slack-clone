@@ -4,6 +4,7 @@ export const appSlice = createSlice({
   name: 'app',
   initialState: {
     value: 0,
+    reloadTime: 0
   },
   reducers: {
     enterRoom: (state, action) => {
@@ -17,7 +18,7 @@ export const appSlice = createSlice({
       state.MessageArray = action.payload.MessageArray;
     },
     reloadPage: (state, action) => {
-      state.reload = action.payload.MessageArray;
+      state.reloadTime = action.payload;
     },
   },
 });
@@ -29,5 +30,6 @@ export const selectchannelName = state => state.app.channelName;
 export const selectChannelArray = state => state.app.ChannelArray;
 export const selectMessageArray = state => state.app.MessageArray;
 export const selectReload = state => state.app.reload;
+export const reloadtime = state => state.app.reloadTime;
 
 export default appSlice.reducer;

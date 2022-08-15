@@ -102,7 +102,7 @@ function Sidebar() {
         { // return length === 2 && <SidebarOption key={dataItem.id} id={dataItem.id} title={dataItem.c_name} />
           ChannelId &&
           ChannelId.map((dataItem, index) => {
-            return <SidebarOption key={dataItem.id} id={dataItem.id} title={dataItem.c_name} />
+            return <SidebarOption key={index} id={dataItem.id} title={dataItem.c_name} />
           })
         }
       </SidebarMain>

@@ -8,8 +8,10 @@ import MessageBox from './MessageBox';
 import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
+
 function Chat() {
   const chatRef = useRef(null);
+  const { reloadTime } = useSelector((state) => state.app);
   const ChannelId = useSelector(selectChannelId)
   const ChannelName = useSelector(selectchannelName);
   const [allMessages, setAllMessages] = useState([]);
@@ -22,7 +24,6 @@ function Chat() {
   }
 
   useEffect(() => {
-
     getDocs(subColRef)
       .then(snapshot => {
         let messages = []
@@ -39,7 +40,7 @@ function Chat() {
       .catch(err => {
         console.log(err.message)
       })
-  }, [reloadme, ChannelName])
+  }, [reloadme, ChannelName, reloadTime])
 
   return (
     <>
@@ -49,7 +50,7 @@ function Chat() {
             const { message, user, time, userImage, timeStamp } = messages;
             return <>
               <MessageBox
-                key={timeStamp}
+                key={index}
                 Message={message}
                 Timestamp={timeStamp}
                 User={user}
@@ -61,7 +62,7 @@ function Chat() {
         </ChatMessages>
       }
       <ChatInput
-        key={1}
+        key={Math.random()}
         reload={reload}
         chatRef={chatRef}
         channelName={ChannelName}
