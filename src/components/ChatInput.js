@@ -4,10 +4,13 @@ import { Button } from '@mui/material';
 import { auth, db } from '../firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useDispatch } from 'react-redux';
+import { reloadPage } from '../features/app';
 
 export default function ChatInput({ channelName, channelId, chatRef, reload }) {
   const [input, setInput] = useState('')
   const [user] = useAuthState(auth);
+  const dispatch = useDispatch();
 
   if (channelName === undefined) {
     channelName = "ChannelName"
@@ -31,6 +34,8 @@ export default function ChatInput({ channelName, channelId, chatRef, reload }) {
     chatRef?.current?.scrollIntoView({
       behavior: "smooth",
     })
+
+    dispatch(reloadPage(Math.floor(Math.random() * 10)))
 
     reload();
     setInput('')
